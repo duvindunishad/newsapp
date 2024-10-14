@@ -9,9 +9,11 @@ import 'aos/dist/aos.css';
 
 import type { Metadata } from "next";
 import {EB_Garamond} from "next/font/google";
+
+import Header from '@/components/Header';
+
 import "./variables.css";
 import "./globals.css";
-
 
 const ebGermond = EB_Garamond({subsets: ['latin']});
 export const metadata: Metadata = {
@@ -27,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={ebGermond.className}>
+        <Header/>
         {children}
       </body>
     </html>

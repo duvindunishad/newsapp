@@ -136,3 +136,12 @@ section {
 .mb-4 {
   margin-bottom: 1.5rem !important;
 }
+
+/* posts.css */
+
+/* Container defaults */
+.container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+}

@@ -1,12 +1,12 @@
 import Hero from "@/sections/Hero";
-import Post from "@/sections/Post";
+import Posts from "@/sections/Posts";
 
 
 export default function Home() {
   return (
    <main id="main">
     <Hero/>
-    <Post/>
+    <Posts/>
    </main>
   );
 }

@@ -79,7 +79,7 @@ export default function Posts() {
   // Fetch data on component mount
   useEffect(() => {
     getItemsData();
-  }, []);
+  });
 
   return (
     <section id="posts" className="posts">

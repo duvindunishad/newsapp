@@ -2,6 +2,7 @@ import React from 'react'
 import './postitemone.css'
 import Link from 'next/link';
 import { PostProps } from '@/sections/Posts';
+import Image from 'next/image';
 
 export default function PostItemOne({large, item}:{
     large: boolean,
@@ -10,7 +11,13 @@ export default function PostItemOne({large, item}:{
   return (
     <div className={`post-entry-1 ${large ? 'lg' : undefined}`}>
         <Link href={`postitems/${item._id}`}>
-        <img src={`/${item.img}`} alt="" className='img-fluid'/>
+        <Image 
+    src={`/${item.img}`} 
+    alt="" 
+    className='img-fluid' 
+    width={600} 
+    height={100} 
+/>
         </Link>
         <div className="post-meta">
             <span className='date'>{item.category}</span>

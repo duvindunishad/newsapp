@@ -7,54 +7,78 @@ import PostItemOne from '../components/PostItemOne';
 import TrendingPost from '@/components/TrendingPost';
 import Preloader from '@/components/Preloader';
 
-export interface PostProps { _id:string;
-  img: string;
-  category: string;
-  date:string;
-  title:string;
-  brief:string;
-  avatar:string;
-  author:string;
- }
+// Define the PostProps interface
+export interface PostProps {
+  _id: string;           // Post ID
+  img: string;           // URL or path to the image
+  category: string;      // Category of the post
+  date: string;          // Date in string format
+  title: string;         // Title of the post
+  brief: string;         // Brief description or summary
+  avatar: string;        // URL or path to the author's avatar
+  author: string;        // Author's name
+  description: string;   // Detailed description of the post
+  figcaption: string;    // Caption for the image or figure
+  paragraphs: string[];  // Array of paragraphs
+}
 
- const initialPost ={
-  _id:'',
+// Initial Post object with default values
+const initialPost: PostProps = {
+  _id: '',
   img: '',
   category: '',
-  date:'',
-  title:'',
-  brief:'',
-  avatar:'',
-  author:'',
- }
+  date: '',
+  title: '',
+  brief: '',
+  avatar: '',
+  author: '',
+  description: '',
+  figcaption: '',
+  paragraphs: [],
+};
 
 export default function Posts() {
   const router = useRouter();
   const [items, setItems] = useState<any | []>([]);
   const [item, setItem] =useState(initialPost);
 
-
-  const getItemsData = () => {
-    fetch(`/api/postitems`)
-      .then((res) => res.json())
-      .then((data) => setItems(data))
-      .catch((e) => console.log(e.message));
+  // Fetch all posts from the database
+  const getItemsData = async () => {
+    try {
+      const response = await fetch(`/api/postitems`);
+      if (!response.ok) throw new Error('Network response was not ok');
+      const data = await response.json();
+      setItems(data);
+      if (data.length > 0) {
+        // Pick a random post ID after successfully fetching all posts
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const randomId = data[randomIndex]._id;
+        getSinglePostData(randomId);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
   };
 
-  const getSinglePostData=(id:string)=>{
-    fetch(`/api/postitems/${id}`)
-    .then(res=>{
-      if(res.status === 404){
-        router.push('/not-found')
+  // Fetch a single post by ID
+  const getSinglePostData = async (id: string) => {
+    try {
+      const response = await fetch(`/api/postitems/${id}`);
+      if (response.status === 404) {
+        router.push('/not-found');
+      } else if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      return res.json();
-    })
-    .then(data => setItem(data))
-    .catch(e=>console.log(e.message));
-  }
+      const data = await response.json();
+      setItem(data);
+    } catch (error) {
+      console.error('Error fetching single post:', error);
+    }
+  };
+
+  // Fetch data on component mount
   useEffect(() => {
     getItemsData();
-    getSinglePostData('670f958345d2f13275597f85');
   }, []);
 
   return (
@@ -109,4 +133,4 @@ export default function Posts() {
       </div>
     </section>
   );
-}
+};

@@ -108,8 +108,8 @@ export default function PostItem({params} : {params: {id: string}}) {
       src={`/${item.img}`}
       alt="Descriptive alt text"
       className="img-fluid"
-      width={20}  // Reduced width
-      height={30} // Reduced height
+      width={100}  // Reduced width
+      height={100} // Reduced height
       layout="responsive"
     />
     <figcaption >
@@ -156,6 +156,11 @@ export default function PostItem({params} : {params: {id: string}}) {
                         <div className="tab-content">
                           <div className={`tab-pane fade ${tabs[0].active ? 'show active' : ''}`}>
                             {items.slice(0, 6).map((item: PostProps) => (
+                              <SidePostItem key={item._id} item={item}/>
+                            ))}
+                          </div>
+                          <div className={`tab-pane fade ${tabs[1].active ? 'show active' : ''}`}>
+                            {items.slice(6, 12).map((item: PostProps) => (
                               <SidePostItem key={item._id} item={item}/>
                             ))}
                           </div>

@@ -147,14 +147,14 @@ section {
 .container {
   width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  /* padding: 20px; */
   
 }
 
 .image-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  /* padding: 20px; */
 
 }
 
@@ -163,7 +163,7 @@ section {
   text-align: center;
   max-width: 600px;
   border: none;
-  padding-left:60%;
+  padding-left:55%;
 }
 
 

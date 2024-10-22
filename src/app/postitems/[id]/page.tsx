@@ -3,6 +3,7 @@ import { useEffect ,useState } from "react"
 import React from 'react'
 import './style.css'
 import Image from "next/image";
+import Preloader from "@/components/Preloader";
 
 export interface PostProps {
     _id: string;           // Post ID, should be a string
@@ -56,7 +57,7 @@ export default function PostItem({params} : {params: {id: string}}) {
             <div className="container">
                 <div className="row">
                     <div className="col-md-9 post-content">
-                        <div className="single-post">
+                        {item&& item.category !== '' ? (<div className="single-post">
                             <div className="post-meta">
                                 <span className="date">{item.category}</span>
                                 <span className="mx-1"><i className="bi bi-dot"></i></span>
@@ -130,7 +131,7 @@ export default function PostItem({params} : {params: {id: string}}) {
     ))}
 </div>
 
-                        </div>
+                        </div>): <Preloader/>}
                     </div>
                 </div>
             </div>

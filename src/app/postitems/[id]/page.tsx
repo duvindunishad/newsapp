@@ -58,13 +58,6 @@ export default function PostItem({params} : {params: {id: string}}) {
       }))
     }
 
-    const getSinglePostData = () =>{
-        fetch(`/api/postitems/${id}`)
-        .then(res => res.json())
-        .then(data => setItem(data))
-        .catch(e => console.log(e.message));
-    };
-
     const getItemsData = async () => {
       fetch(`/api/postitems`)
         .then(res => res.json())
@@ -73,9 +66,16 @@ export default function PostItem({params} : {params: {id: string}}) {
     };
 
     useEffect(()=>{
+        const getSinglePostData = () =>{
+            fetch(`/api/postitems/${id}`)
+            .then(res => res.json())
+            .then(data => setItem(data))
+            .catch(e => console.log(e.message));
+        };
+
         getSinglePostData();
         getItemsData();
-    },[]);
+    },[id]);
 
   return (
     <main id="main">
@@ -119,7 +119,7 @@ export default function PostItem({params} : {params: {id: string}}) {
 </div>
 
 
-                            {/* <figure className="my-5">
+{/* <figure className="my-5">
                                 <img src={`/${item.img}`} alt="" className="img-fluid" />
                                 <figcaption>
                                 Artificial intelligence is transforming the world of modern art, blending human creativity with computational power in unprecedented ways. AI-generated art has become a novel medium where algorithms, deep learning models, 
@@ -133,7 +133,7 @@ export default function PostItem({params} : {params: {id: string}}) {
                         
 <div className="justified-paragraph">
     {item.paragraphs.map((paragraph, index) => (
-        <p key={index} style={{ marginBottom: '1em' }}> {/* Adjust margin as needed */}
+        <p key={index} style={{ marginBottom: '1em' }}>
             {paragraph}
         </p>
     ))}
@@ -173,7 +173,14 @@ export default function PostItem({params} : {params: {id: string}}) {
                           href="https://www.youtube.com"
                           className="link-video">
                             <span className="bi-play"></span>
-                            <img src="/assets/img/post-landscape-3.jpg" alt="" className="img-fluid"/>
+                            <Image
+                              src="/assets/img/post-landscape-3.jpg"
+                              alt=""
+                              className="img-fluid"
+                              width={300}
+                              height={200}
+                            />
+                            {/* <img src="/assets/img/post-landscape-3.jpg" alt="" className="img-fluid"/> */}
                           </a>
                         </div>
                       </div>

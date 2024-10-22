@@ -9,15 +9,17 @@ import SearchForm from './SearchForm';
 export default function Header() {
     const [open, setOpen] = useState(false);
     const [on, setOn] = useState(false);
-    const handleFormOpen = (e: Event | any) =>{
+    const handleFormOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setOpen(!open);
     };
 
-    const handleToggleMenu = () =>{
+    const handleToggleMenu = () => {
         setOn(!on);
-        const body: HTMLElement | any = document.querySelector('body');
-        body.classList.toggle('mobile-nav-active');
+        const body = document.querySelector('body');
+        if (body) {
+            body.classList.toggle('mobile-nav-active');
+        }
     };
   return (
     <header id='header' className='header d-flex align-items-center fixed-top'>
@@ -29,9 +31,9 @@ export default function Header() {
             <Nav/>
             <div className="position-relative">
                 <Sci/>
-                <a className='mx-2 js-search-open' onClick={handleFormOpen}>
+                <button className='mx-2 js-search-open border-0' onClick={handleFormOpen}>
                     <span className='bi-search'></span>
-                </a>
+                </button>
                 {
                     on ? (
                         <i className='bi bi-x mobile-nav-toggle' onClick={handleToggleMenu}></i>

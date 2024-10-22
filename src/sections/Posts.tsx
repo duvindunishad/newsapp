@@ -39,7 +39,7 @@ const initialPost: PostProps = {
 
 export default function Posts() {
   const router = useRouter();
-  const [items, setItems] = useState<any | []>([]);
+  const [items, setItems] = useState< | []>([]);
   const [item, setItem] =useState(initialPost);
 
   // Fetch all posts from the database
@@ -133,4 +133,5 @@ export default function Posts() {
       </div>
     </section>
   );
-};
+
+}

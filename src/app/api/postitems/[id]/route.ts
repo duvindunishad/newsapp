@@ -6,7 +6,7 @@ export async function GET(request: Request, {params}: {params: {id: string}}) {
     try {
         const postItem = await PostItem.findById(params.id).select('-__v');
     return Response.json(postItem)
-    } catch (error) {
+    } catch {
         return new Response(JSON.stringify({message: 'No item found for this id'}),
         {status:404,});
     }

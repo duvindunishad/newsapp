@@ -33,12 +33,12 @@ export async function POST(request: Request) {
             headers: { 'Content-Type': 'application/json' },
             status: 201,
         });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error saving post item:', error); // Log the error for debugging
         
         // Check if the error is a validation error
-        if (error.name === 'ValidationError') {
-            return new Response(JSON.stringify({ message: 'Validation error', details: error.errors }), {
+        if (error instanceof Error && error.name === 'ValidationError' && 'errors' in error) {
+            return new Response(JSON.stringify({ message: 'Validation error', details: (error as Error & { errors: Record<string, unknown> }).errors }), {
                 headers: { 'Content-Type': 'application/json' },
                 status: 400, // Bad request
             });

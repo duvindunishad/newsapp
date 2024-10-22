@@ -6,7 +6,7 @@ export default function SearchForm({
     formOpen,
 }:{
     active: boolean,
-    formOpen: object | any;
+    formOpen: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
     <div className={`search-form-wrap js-search-form-wrap ${active ? 'active': undefined}` }>

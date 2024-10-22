@@ -115,6 +115,10 @@ section {
   padding: 0 !important;
 }
 
+.justified-paragraph {
+  text-align: justify;
+}
+
 .error-page {
   background-color: #bababa4a;
   -webkit-backdrop-filter: blur(9px);

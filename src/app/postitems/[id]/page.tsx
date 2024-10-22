@@ -90,7 +90,7 @@ export default function PostItem({params} : {params: {id: string}}) {
                                 <span>{new Date(item.date).toLocaleDateString('en-US')}</span>
                             </div>
                             <h1 className="mb-5">{item.title}</h1>
-                            <p>
+                            <p className="justified-paragraph">
                                 <span className="firstcharacter">
                                     {item.brief && item.brief.charAt(0)}
                                 </span>
@@ -99,7 +99,7 @@ export default function PostItem({params} : {params: {id: string}}) {
                             {/* <p>Artificial intelligence is transforming the world of modern art, blending human creativity with computational power in unprecedented ways. AI-generated art has become a novel medium where algorithms, deep learning models, and neural networks analyze vast data sets of existing artworks to create entirely new pieces. Artists use AI tools to explore patterns, textures, and compositions beyond human capabilities, fostering a collaborative dynamic between the machine and the artist. This fusion is not about replacing human creativity but enhancing it, offering fresh perspectives and pushing the boundaries of imagination in digital art, music, literature, and design. As AI continues to evolve, it opens doors to innovative approaches, challenging traditional notions of authorship and originality, and paving the way for a new artistic frontier.
 
                             </p> */}
-                            <p>{item.description}</p>
+                            <p className="justified-paragraph">{item.description}</p>
                             <div className="image-container">
   <figure
     className="styled-figure my-5"
@@ -112,7 +112,7 @@ export default function PostItem({params} : {params: {id: string}}) {
       height={30} // Reduced height
       layout="responsive"
     />
-    <figcaption>
+    <figcaption >
       {item.figcaption}
     </figcaption>
   </figure>
@@ -131,7 +131,7 @@ export default function PostItem({params} : {params: {id: string}}) {
                         <p>Artificial intelligence is transforming the world of modern art, blending human creativity with computational power in unprecedented ways. AI-generated art has become a novel medium where algorithms, deep learning models, and neural networks analyze vast data sets of existing artworks to create entirely new pieces. Artists use AI tools to explore patterns, textures, and compositions beyond human capabilities, fostering a collaborative dynamic between the machine and the artist. This fusion is not about replacing human creativity but enhancing it, offering fresh perspectives and pushing the boundaries of imagination in digital art, music, literature, and design. As AI continues to evolve, it opens doors to innovative approaches, challenging traditional notions of authorship and originality, and paving the way for a new artistic frontier.</p>
                         <p>Artificial intelligence is transforming the world of modern art, blending human creativity with computational power in unprecedented ways. AI-generated art has become a novel medium where algorithms, deep learning models, and neural networks analyze vast data sets of existing artworks to create entirely new pieces. Artists use AI tools to explore patterns, textures, and compositions beyond human capabilities, fostering a collaborative dynamic between the machine and the artist. This fusion is not about replacing human creativity but enhancing it, offering fresh perspectives and pushing the boundaries of imagination in digital art, music, literature, and design. As AI continues to evolve, it opens doors to innovative approaches, challenging traditional notions of authorship and originality, and paving the way for a new artistic frontier.</p> */}
                         
-<div>
+<div className="justified-paragraph">
     {item.paragraphs.map((paragraph, index) => (
         <p key={index} style={{ marginBottom: '1em' }}> {/* Adjust margin as needed */}
             {paragraph}

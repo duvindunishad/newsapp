@@ -166,6 +166,17 @@ export default function PostItem({params} : {params: {id: string}}) {
                           </div>
                         </div>
                       </div>
+                      <div className="aside-block">
+                        <h3 className="aside-title">Video</h3>
+                        <div className="video-post">
+                          <a target="_blank"
+                          href="https://www.youtube.com"
+                          className="link-video">
+                            <span className="bi-play"></span>
+                            <img src="/assets/img/post-landscape-3.jpg" alt="" className="img-fluid"/>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>

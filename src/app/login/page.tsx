@@ -17,7 +17,7 @@ export default function LoginPage() {
     setSuccess('');
 
     try {
-      const response = await fetch('/api/login', { // Update the endpoint as necessary
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,20 +27,29 @@ export default function LoginPage() {
 
       // Check if the response is not okay
       if (!response.ok) {
-        const errorData = await response.json(); // Try to parse JSON error response
-        throw new Error(errorData.message || 'Something went wrong'); // Adjusted error message handling
+        const errorData = await response.json(); // Parse the error response
+        throw new Error(errorData.message || 'Something went wrong');
       }
 
-      await response.json(); // Get user data or token
-      setSuccess('Login successful!'); // Optionally, you might want to store a token or user info here
+      const data = await response.json(); // Get the token or user data
+      const token = data.token;
 
-      // Redirect to dashboard on successful login
-      router.push('/dashboard'); // Redirect to the dashboard page
+      if (token) {
+        // Save the token in localStorage or cookies
+        localStorage.setItem('token', token);
+        
+        // Redirect to dashboard after successful login
+        setSuccess('Login successful! Redirecting...');
+        router.push(`/userdashboard/${data.userId}`);
+      } else {
+        throw new Error('Login failed. Token not received.');
+      }
 
     } catch (error) {
       setError((error as Error).message);
     }
   };
+
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
       <div className="col-lg-5 col-md-7 col-sm-10">
@@ -86,7 +95,7 @@ export default function LoginPage() {
               </button>
             </form>
             <p className="text-center text-muted mt-3">
-              Dont have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-primary fw-bold">
                 Register here
               </Link>

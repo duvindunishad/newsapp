@@ -1,70 +1,71 @@
-// src/app/api/login/route.ts
-import dbConnect from "../../../../config/db"; // Connect to the database
-import User from "../../../../models/Users"; // Import the User model
-import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
+// app/api/login/route.ts
 
-// Establish a database connection
+import dbConnect from '../../../../config/db';
+import User from '../../../../models/Users';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 dbConnect();
 
-// Handle POST requests for user login
 export async function POST(request: Request) {
     try {
-        const { email, password } = await request.json(); // Parse JSON from the request body
+        const { email, password } = await request.json();
 
-        // Basic validation
         if (!email || !password) {
-            return new Response(JSON.stringify({ message: 'Email and password are required' }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 400, // Bad request
-            });
+            return new Response(
+                JSON.stringify({ message: 'Email and password are required' }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    status: 400,
+                }
+            );
         }
 
-        // Check if the user exists
-        const user = await User.findOne({ email });
-        if (!user) {
-            return new Response(JSON.stringify({ message: 'Invalid email or password' }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 401, // Unauthorized
-            });
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
+            return new Response(
+                JSON.stringify({ message: 'Invalid credentials' }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    status: 401,
+                }
+            );
         }
 
-        // Compare the password with the hashed password stored in the database
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, existingUser.password);
         if (!isMatch) {
-            return new Response(JSON.stringify({ message: 'Invalid email or password' }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 401, // Unauthorized
-            });
+            return new Response(
+                JSON.stringify({ message: 'Invalid credentials' }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    status: 401,
+                }
+            );
         }
 
-        // Optionally, you could create a token here (e.g., JWT) to return to the client
+        // Create JWT and include user id
+        const token = jwt.sign(
+            { email: existingUser.email, id: existingUser._id },
+            process.env.JWT_SECRET as string,
+            { expiresIn: '1h' }
+        );
 
-        return new Response(JSON.stringify({ message: 'Login successful', user }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 200, // OK
-        });
-    } catch (error: unknown) {
-        console.error('Error logging in user:', error); // Log the error for debugging
-        
-        // Handle unexpected errors
-        if (error instanceof Error) {
-            return new Response(JSON.stringify({ message: 'Server error', details: error.message }), {
+        // Return the token and the user id
+        return new Response(
+            JSON.stringify({ token, userId: existingUser._id }),
+            {
                 headers: { 'Content-Type': 'application/json' },
-                status: 500, // Internal server error
-            });
-        }
-
-        return new Response(JSON.stringify({ message: 'Unexpected error' }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 500,
-        });
+                status: 200,
+            }
+        );
+    } catch (error) {
+        console.error('Error logging in user:', error);
+        return new Response(
+            JSON.stringify({ message: 'Server error' }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                status: 500,
+            }
+        );
     }
-}
-
-// Optionally, handle GET requests (not typical for a login endpoint)
-export async function GET() {
-    return new Response(JSON.stringify({ message: 'Use POST to log in a user.' }), {
-        headers: { 'Content-Type': 'application/json' },
-        status: 405, // Method Not Allowed
-    });
 }

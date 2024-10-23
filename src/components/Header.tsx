@@ -5,25 +5,22 @@ import './header.css';
 import Nav from './Nav';
 import Sci from './Sci';
 import SearchForm from './SearchForm';
-import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const [on, setOn] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-    const router = useRouter(); // Initialize router
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+    const [, setUserId] = useState<string | null>(null); // Track user ID
 
     useEffect(() => {
-        // Check login status on component mount
-        const checkLoginStatus = async () => {
-            // You can replace this with your actual API call to check login status
-            const response = await fetch('api/auth/status'); // Adjust the endpoint
-            if (response.ok) {
-                const data = await response.json();
-                setIsLoggedIn(data.isLoggedIn); // Assuming the response returns an isLoggedIn boolean
-            }
-        };
-        checkLoginStatus();
+        // Check login status and retrieve user ID from localStorage or context
+        const token = localStorage.getItem('token'); // Example token storage
+        if (token) {
+            // Simulate fetching user data (replace with actual fetch call)
+            const userData = JSON.parse(localStorage.getItem('user') || '{}');
+            setIsLoggedIn(true);
+            setUserId(userData.id); // Assume userData contains an id field
+        }
     }, []);
 
     const handleFormOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,21 +36,28 @@ export default function Header() {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await fetch('/api/logout', {
-                method: 'POST',
-            });
-            setIsLoggedIn(false); // Update login status
-            router.push('/login'); // Redirect to login after logout
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
+    const handleLogin = () => {
+        console.log("Login button clicked");
+        // Simulate successful login
+        const simulatedUserId = '12345'; 
+        // This would be dynamically set from your login logic
+        localStorage.setItem('user', JSON.stringify({ id: simulatedUserId })); 
+        // Save user ID in localStorage
+        setIsLoggedIn(true); // Update login status
+        setUserId(simulatedUserId); // Set the user ID
+        // Redirect to the user's dashboard
+        window.location.href = `/userdashboard/${simulatedUserId}`;
     };
 
-    const handleLogin = () => {
-        // Redirect to login page
-        router.push('/login'); 
+    const handleLogout = () => {
+        console.log("Logout button clicked");
+        // Clear user session and local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false); // Update login status
+        setUserId(null); // Clear user ID
+        // Redirect to the home page
+        window.location.href = '/';
     };
 
     return (
@@ -77,15 +81,9 @@ export default function Header() {
 
                     {/* Dynamic Button Rendering */}
                     {isLoggedIn ? (
-                        <>
-                            <button className="mx-2 btn btn-outline-secondary" onClick={handleLogout}>
-                                Logout
-                            </button>
-                            {/* New Post Button */}
-                            <button className="mx-2 btn btn-primary" onClick={() => router.push('/newpost')}>
-                                New Post
-                            </button>
-                        </>
+                        <button className="mx-2 btn btn-outline-secondary login-button" onClick={handleLogout}>
+                            Logout
+                        </button>
                     ) : (
                         <button className="mx-2 btn btn-outline-secondary login-button" onClick={handleLogin}>
                             Login

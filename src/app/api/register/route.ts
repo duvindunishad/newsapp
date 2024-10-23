@@ -1,7 +1,7 @@
-// src/app/api/register/route.ts
 import dbConnect from "../../../../config/db"; // Connect to the database
 import User from "../../../../models/Users"; // Import the User model
-import bcrypt from 'bcrypt'; // Import bcrypt for hashing passwords
+import bcrypt from "bcrypt"; // For password hashing
+import jwt from 'jsonwebtoken'; // For JWT token creation
 
 // Establish a database connection
 dbConnect();
@@ -28,20 +28,23 @@ export async function POST(request: Request) {
             });
         }
 
-        // Hash the password before saving
-        const hashedPassword = await bcrypt.hash(password, 10); // Hashing with a salt rounds of 10
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new User instance with the hashed password
+        // Create a new User instance and save it to the database
         const newUser = new User({ email, password: hashedPassword });
         await newUser.save();
 
-        return new Response(JSON.stringify(newUser), {
+        // Create a JWT token
+        const token = jwt.sign({ email: newUser.email, id: newUser._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+
+        return new Response(JSON.stringify({ token }), {
             headers: { 'Content-Type': 'application/json' },
             status: 201, // Created
         });
     } catch (error: unknown) {
         console.error('Error registering user:', error); // Log the error for debugging
-        
+
         // Handle validation errors
         if (error instanceof Error) {
             return new Response(JSON.stringify({ message: 'Server error', details: error.message }), {

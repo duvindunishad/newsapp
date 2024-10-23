@@ -7,6 +7,8 @@ import Preloader from "@/components/Preloader";
 import SidePostItem from "@/components/SidePostItem";
 
 export interface PostProps {
+  top: unknown;
+  trending: unknown;
     _id: string;           // Post ID, should be a string
     img: string;           // URL or path to the image
     category: string;      // Category of the post
@@ -33,6 +35,8 @@ export interface PostProps {
     description: '',
     figcaption: '',
     paragraphs: [],  // Initialize paragraphs as an empty array
+    top: undefined,
+    trending: undefined
   };
   
 

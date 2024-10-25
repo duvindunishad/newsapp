@@ -1,13 +1,30 @@
 // app/userdashboard/[id]/page.tsx
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // for navigation
-import PostItems from '../../postitems/page'; // Assuming you have PostItems to display user's posts
+import PostItems from '../../postitems/page'; // Component to display user's posts
+
+interface User {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    mobileNumber: string;
+    address: {
+        street: string;
+        city: string;
+        state: string;
+        zipCode: string;
+    };
+    createdAt: string;
+    username: string; // Assuming 'username' is a field in the user data
+}
 
 export default function UserDashboard({ params }: { params: { id: string } }) {
     const router = useRouter();
-    const [user, setUser] = useState<{ email: string; id: string; name: string; createdAt: string } | null>(null); // Extended user data
-    const [error, setError] = useState('');
+    const [user, setUser] = useState<User | null>(null);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -53,26 +70,44 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div className="container mt-4">
-            <h1>User Dashboard</h1>
-            <h2>Welcome, {user?.name || 'Guest'}!</h2>
+        <div className="container mt-6">
+            <div className="text-center mb-5 mt-5 pt-5">
+                <h1 className="display-4 font-weight-bold text-primary">User Dashboard</h1>
+                <h2 className="text-muted">Welcome, {user?.firstName || 'Guest'}!</h2>
+            </div>
 
             {user && (
                 <>
-                    {/* Display additional user details */}
-                    <div className="user-details mt-3">
-                        <p><strong>Name:</strong> {user.name}</p>
-                        <p><strong>Email:</strong> {user.email}</p>
-                        <p><strong>Joined:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
+                    {/* Display user details */}
+                    <div className="card shadow-sm border-0 mb-5">
+                        <div className="card-body">
+                            <h3 className="card-title text-secondary">User Information</h3>
+                            <hr />
+                            <p className="card-text"><strong>Username:</strong> {user.firstName}</p>
+                            <p className="card-text"><strong>Full:</strong> {user.firstName} {user.lastName}</p>
+                            <p className="card-text"><strong>Email:</strong> {user.email}</p>
+                            <p className="card-text"><strong>Mobile Number:</strong> {user.mobileNumber}</p>
+                            <p className="card-text"><strong>Address:</strong> {user.address.street}, {user.address.city}, {user.address.state} {user.address.zipCode}</p>
+                            {/* <p className="card-text"><strong>Joined:</strong> {new Date(user.createdAt).toLocaleDateString()}</p> */}
+                        </div>
                     </div>
 
                     {/* Create New Post Button */}
-                    <button className="btn btn-primary mt-3" onClick={handleCreatePost}>
-                        Create New Post
-                    </button>
+                    <div className="text-center mb-5">
+                        <button 
+                            className="btn btn-lg btn-primary"
+                            onClick={handleCreatePost}
+                        >
+                            Create New Post
+                        </button>
+                    </div>
 
                     {/* Display user's posts */}
-                    <PostItems />
+                    <div className="row">
+                        <div className="col-md-12">
+                            <PostItems />
+                        </div>
+                    </div>
                 </>
             )}
         </div>

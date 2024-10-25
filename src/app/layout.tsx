@@ -14,6 +14,7 @@ import Header from '@/components/Header';
 
 import "./variables.css";
 import "./globals.css";
+import Footer from '@/components/footer';
 
 const ebGermond = EB_Garamond({subsets: ['latin']});
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className={ebGermond.className}>
         <Header/>
         {children}
+        <Footer/>
       </body>
     </html>
   );

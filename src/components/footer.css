@@ -1,0 +1,18 @@
+.footer {
+    padding: 3rem 0;
+    background-color: #343a40; /* Dark background */
+  }
+  .footer-link {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s;
+  }
+  .footer-link:hover {
+    color: #ffffff; /* White on hover */
+  }
+  .social-link {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s;
+  }
+  .social-link:hover {
+    color: #ffffff; /* White on hover */
+  }

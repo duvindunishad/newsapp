@@ -11,12 +11,12 @@ export const navs = [
     link: '/postitems',
     active: false,
   },
-  {
-    id: 3,
-    name: 'Create Post',
-    link: '/createpostitems',
-    active: false,
-  },
+  // {
+  //   id: 3,
+  //   name: 'Create Post',
+  //   link: '/createpostitems',
+  //   active: false,
+  // },
   {
     id: 4,
     name: 'About',

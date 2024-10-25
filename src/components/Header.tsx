@@ -7,46 +7,29 @@ import Sci from './Sci';
 import SearchForm from './SearchForm';
 
 export default function Header() {
-    const [open, setOpen] = useState(false);
-    const [on, setOn] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
-    const [, setUserId] = useState<string | null>(null); // Track user ID
+    const [open, setOpen] = useState<boolean>(false);
+    const [on, setOn] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Track login status
 
     useEffect(() => {
-        // Check login status and retrieve user ID from localStorage or context
-        const token = localStorage.getItem('token'); // Example token storage
+        // Check login status and retrieve user ID from localStorage
+        const token = localStorage.getItem('token');
         if (token) {
-            // Simulate fetching user data (replace with actual fetch call)
             const userData = JSON.parse(localStorage.getItem('user') || '{}');
-            setIsLoggedIn(true);
-            setUserId(userData.id); // Assume userData contains an id field
+            if (userData.id) {
+                setIsLoggedIn(true);
+            }
         }
     }, []);
 
     const handleFormOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setOpen(!open);
+        setOpen(prev => !prev); // Toggle search form
     };
 
     const handleToggleMenu = () => {
-        setOn(!on);
-        const body = document.querySelector('body');
-        if (body) {
-            body.classList.toggle('mobile-nav-active');
-        }
-    };
-
-    const handleLogin = () => {
-        console.log("Login button clicked");
-        // Simulate successful login
-        const simulatedUserId = '12345'; 
-        // This would be dynamically set from your login logic
-        localStorage.setItem('user', JSON.stringify({ id: simulatedUserId })); 
-        // Save user ID in localStorage
-        setIsLoggedIn(true); // Update login status
-        setUserId(simulatedUserId); // Set the user ID
-        // Redirect to the user's dashboard
-        window.location.href = `/userdashboard/${simulatedUserId}`;
+        setOn(prev => !prev); // Toggle mobile navigation
+        document.body.classList.toggle('mobile-nav-active'); // Toggle body class for mobile nav
     };
 
     const handleLogout = () => {
@@ -55,7 +38,6 @@ export default function Header() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setIsLoggedIn(false); // Update login status
-        setUserId(null); // Clear user ID
         // Redirect to the home page
         window.location.href = '/';
     };
@@ -72,11 +54,10 @@ export default function Header() {
                     <button className='mx-2 js-search-open border-0' onClick={handleFormOpen}>
                         <span className='bi-search'></span>
                     </button>
-                    {on ? (
-                        <i className='bi bi-x mobile-nav-toggle' onClick={handleToggleMenu}></i>
-                    ) : (
-                        <i className='bi bi-list mobile-nav-toggle' onClick={handleToggleMenu}></i>
-                    )}
+                    <i
+                        className={`bi mobile-nav-toggle ${on ? 'bi-x' : 'bi-list'}`}
+                        onClick={handleToggleMenu}
+                    ></i>
                     <SearchForm active={open} formOpen={handleFormOpen} />
 
                     {/* Dynamic Button Rendering */}
@@ -85,7 +66,7 @@ export default function Header() {
                             Logout
                         </button>
                     ) : (
-                        <button className="mx-2 btn btn-outline-secondary login-button" onClick={handleLogin}>
+                        <button className="mx-2 btn btn-outline-secondary login-button" onClick={() => window.location.href = '/login'}>
                             Login
                         </button>
                     )}

@@ -51,7 +51,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light mt-5">
       <div className="col-lg-5 col-md-7 col-sm-10">
         <div className="card shadow-lg border-0 rounded-lg">
           <div className="card-body p-5">

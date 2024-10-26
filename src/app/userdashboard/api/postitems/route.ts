@@ -1,5 +1,5 @@
-import dbConnect from "../../../../config/db";
-import PostItem from "../../../../models/PostItem";
+import dbConnect from "../../../../../config/db";
+import PostItem from "../../../../../models/PostItem";
 
 dbConnect();
 

@@ -1,9 +1,8 @@
-// app/userdashboard/[id]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // for navigation
-import PostItems from '../../postitems/page'; // Component to display user's posts
+import { useRouter } from 'next/navigation'; 
+import PostItems from '../../postitems/page'; 
 
 interface User {
     id: string;
@@ -18,7 +17,7 @@ interface User {
         zipCode: string;
     };
     createdAt: string;
-    username: string; // Assuming 'username' is a field in the user data
+    username: string; 
 }
 
 export default function UserDashboard({ params }: { params: { id: string } }) {
@@ -29,36 +28,35 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
-
             if (!token) {
-                router.push('/login'); // Redirect to login if no token found
+                router.push('/login');
                 return;
             }
-
             try {
                 const response = await fetch(`/api/user/${params.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
                 if (!response.ok) {
                     throw new Error('Failed to fetch user data');
                 }
-
                 const userData = await response.json();
-                setUser(userData); // Store user data
+                setUser(userData);
             } catch (error) {
                 setError((error as Error).message);
-                router.push('/login'); // Redirect if error fetching user data
+                router.push('/login'); 
             }
         };
-
         fetchUserData();
     }, [params.id, router]);
 
     const handleCreatePost = () => {
-        router.push('/createpost'); // Redirect to create new post page
+        router.push('/userdashboard/createpostitem');
+    };
+
+    const handleEditPost = (postId: string) => {
+        router.push(`/createpostitem/${postId}`);
     };
 
     if (error) {
@@ -78,34 +76,27 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
 
             {user && (
                 <>
-                    {/* Display user details */}
                     <div className="card shadow-sm border-0 mb-5">
                         <div className="card-body">
                             <h3 className="card-title text-secondary">User Information</h3>
                             <hr />
-                            <p className="card-text"><strong>Username:</strong> {user.firstName}</p>
-                            <p className="card-text"><strong>Full:</strong> {user.firstName} {user.lastName}</p>
-                            <p className="card-text"><strong>Email:</strong> {user.email}</p>
-                            <p className="card-text"><strong>Mobile Number:</strong> {user.mobileNumber}</p>
-                            <p className="card-text"><strong>Address:</strong> {user.address.street}, {user.address.city}, {user.address.state} {user.address.zipCode}</p>
-                            {/* <p className="card-text"><strong>Joined:</strong> {new Date(user.createdAt).toLocaleDateString()}</p> */}
+                            <p><strong>Username:</strong> {user.username}</p>
+                            <p><strong>Full Name:</strong> {user.firstName} {user.lastName}</p>
+                            <p><strong>Email:</strong> {user.email}</p>
+                            <p><strong>Mobile:</strong> {user.mobileNumber}</p>
+                            <p><strong>Address:</strong> {user.address.street}, {user.address.city}, {user.address.state} {user.address.zipCode}</p>
                         </div>
                     </div>
 
-                    {/* Create New Post Button */}
                     <div className="text-center mb-5">
-                        <button 
-                            className="btn btn-lg btn-primary"
-                            onClick={handleCreatePost}
-                        >
+                        <button className="btn btn-lg btn-primary" onClick={handleCreatePost}>
                             Create New Post
                         </button>
                     </div>
 
-                    {/* Display user's posts */}
                     <div className="row">
                         <div className="col-md-12">
-                            <PostItems />
+                            <PostItems onEditPost={handleEditPost} />
                         </div>
                     </div>
                 </>

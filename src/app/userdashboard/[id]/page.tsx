@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; 
-import PostItems from '../../postitems/page'; 
-
+// import PostItems from '../../userdashboard/postitems/page'; 
+import PostItems from '../../postitems/page';
 interface User {
     id: string;
     firstName: string;
@@ -24,6 +24,7 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string>('');
+    const [posts, setPosts] = useState<unknown[]>([]); // State to hold posts
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -43,6 +44,8 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
                 }
                 const userData = await response.json();
                 setUser(userData);
+                // Fetch user posts here
+                await fetchUserPosts(userData.id);
             } catch (error) {
                 setError((error as Error).message);
                 router.push('/login'); 
@@ -51,12 +54,52 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
         fetchUserData();
     }, [params.id, router]);
 
+    const fetchUserPosts = async (userId: string) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`/api/posts?userId=${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch posts');
+            }
+            const postData = await response.json();
+            setPosts(postData);
+        } catch (error) {
+            console.error((error as Error).message);
+        }
+    };
+
+    const handleDeletePost = async (postId: string) => {
+        const token = localStorage.getItem('token');
+        if (confirm('Are you sure you want to delete this post?')) {
+            try {
+                const response = await fetch(`userdashboard/updatetepostitem/${postId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (response.ok) {
+                    // Refresh the posts list after deletion
+                    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+                } else {
+                    throw new Error('Failed to delete post');
+                }
+            } catch (error) {
+                console.error((error as Error).message);
+            }
+        }
+    };
+
     const handleCreatePost = () => {
         router.push('/userdashboard/createpostitem');
     };
 
     const handleEditPost = (postId: string) => {
-        router.push(`/createpostitem/${postId}`);
+        router.push(`userdashboard/updatetepostitem/${postId}`);
     };
 
     if (error) {
@@ -96,7 +139,7 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
 
                     <div className="row">
                         <div className="col-md-12">
-                            <PostItems onEditPost={handleEditPost} />
+                            <PostItems posts={posts} onEditPost={handleEditPost} onDeletePost={handleDeletePost} />
                         </div>
                     </div>
                 </>

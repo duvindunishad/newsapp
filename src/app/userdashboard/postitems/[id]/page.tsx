@@ -87,13 +87,13 @@ export default function PostItem({ params }: { params: { id: string } }) {
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this post?')) {
       try {
-        const response = await fetch(`/api/postitems/${id}`, {
+        const response = await fetch(`/userdashboard/api/postitems/${id}`, {
           method: 'DELETE',
         });
         if (response.ok) {
           alert('Post deleted successfully!');
           // Redirect or update state as needed, e.g., navigate back
-          window.location.href = '/'; // Redirect to homepage or appropriate route
+          window.location.href = `/userdashboard/${id}`; // Redirect to homepage or appropriate route
         } else {
           alert('Failed to delete post.');
         }

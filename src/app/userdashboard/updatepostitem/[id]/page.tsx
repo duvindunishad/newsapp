@@ -3,9 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { initialState } from '../page';
 
+interface PostState {
+  title: string;
+  img: string;
+  category: string;
+  author: string;
+  brief: string;
+  avatar: string;
+  top: boolean;
+  trending: boolean;
+  description: string;
+  figcaption: string;
+  paragraphs: string[];
+  validate: string;
+}
 export default function EditPostItem({ params }: { params: { id: string } }) {
-  const { id } = params; // Destructure id from params
-  const [text, setText] = useState(initialState);
+  const { id } = params;
+  const [text, setText] = useState<PostState>(initialState);
 
   // Fetch post data by ID
   const fetchSinglePostData = async () => {
@@ -17,7 +31,11 @@ export default function EditPostItem({ params }: { params: { id: string } }) {
       const data = await response.json();
       setText(data);
     } catch (error) {
-      console.error('Error fetching post data:', error.message);
+      if (error instanceof Error) {
+        console.error('Error fetching post data:', error.message);
+      } else {
+        console.error('Error fetching post data:', String(error));
+      }
     }
   };
 
@@ -39,7 +57,7 @@ export default function EditPostItem({ params }: { params: { id: string } }) {
 
   // Handle paragraph input changes
   const handleParagraphChange = (index: number, value: string) => {
-    const updatedParagraphs = [...text.paragraphs];
+    const updatedParagraphs = [...text.paragraphs] as string[];
     updatedParagraphs[index] = value;
     setText((prev) => ({
       ...prev,
@@ -47,7 +65,6 @@ export default function EditPostItem({ params }: { params: { id: string } }) {
       validate: '',
     }));
   };
-
   // Add a new paragraph input field
   const addParagraph = () => {
     setText((prev) => ({
@@ -63,8 +80,7 @@ export default function EditPostItem({ params }: { params: { id: string } }) {
 
     // Simple validation
     const requiredFields = ['title', 'img', 'category', 'brief', 'description'];
-    const isFormValid = requiredFields.every(field => text[field]);
-
+    const isFormValid = requiredFields.every(field => field in text && Boolean(text[field as keyof typeof text]));
     if (!isFormValid) {
       setText((prev) => ({ ...prev, validate: 'incomplete' }));
       return;

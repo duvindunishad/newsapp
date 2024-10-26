@@ -39,3 +39,21 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });
     }
 }
+
+// DELETE function to remove a specific PostItem by ID
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+    try {
+        const postItem = await PostItem.findByIdAndDelete(params.id);
+
+        if (!postItem) {
+            return new Response(JSON.stringify({ message: "No item found for this ID" }), { status: 404 });
+        }
+
+        return new Response(JSON.stringify({ message: "Post deleted successfully" }), {
+            headers: { "Content-Type": "application/json" },
+            status: 200,
+        });
+    } catch {
+        return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });
+    }
+}

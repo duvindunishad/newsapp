@@ -14,12 +14,12 @@ export const initialState = {
   trending: false,     // Boolean flag for trending article
   description: '',     // Required field for detailed description
   figcaption: '',      // Optional field for image caption
-  paragraphs: [],      // Array of strings for paragraphs
+  paragraphs: [] as string[], // Explicitly declare paragraphs as string[]
   validate: '',
 };
 
 export default function CreatePostItem() {
-  const [text, setText] = useState(initialState);
+  const [text, setText] = useState<typeof initialState>(initialState); // Set state type
 
   // Handle input changes
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,8 +34,8 @@ export default function CreatePostItem() {
 
   // Handle paragraphs input (for adding multiple paragraphs)
   const handleParagraphChange = (index: number, value: string) => {
-    const updatedParagraphs = [...text.paragraphs] as string[];
-    updatedParagraphs[index] = value;
+    const updatedParagraphs = [...text.paragraphs]; // Make a copy of paragraphs
+    updatedParagraphs[index] = value; // Update the specific paragraph
     setText((prev) => ({
       ...prev,
       paragraphs: updatedParagraphs,
@@ -47,7 +47,7 @@ export default function CreatePostItem() {
   const addParagraph = () => {
     setText((prev) => ({
       ...prev,
-      paragraphs: [...prev.paragraphs, ''],
+      paragraphs: [...prev.paragraphs, ''], // Add an empty paragraph
       validate: '',
     }));
   };

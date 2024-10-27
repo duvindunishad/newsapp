@@ -8,9 +8,10 @@ import { PostProps } from '@/sections/Posts';
 
 interface PostItemsProps {
     onEditPost: (postId: string) => void;
+    
 }
 
-export default function PostItems({ onEditPost }: PostItemsProps) {
+export default function PostItems({  }: PostItemsProps) {
     const [items, setItems] = useState<PostProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -45,7 +46,7 @@ export default function PostItems({ onEditPost }: PostItemsProps) {
                         ) : items.length > 0 ? (
                             items.map((item) => (
                                 <div className="col-lg-3 col-md-6" key={item._id}>
-                                    <PostItemOne large={false} item={item} onEdit={() => onEditPost(item._id)} />
+                                    <PostItemOne large={false} item={item} />
                                 </div>
                             ))
                         ) : (
@@ -56,5 +57,4 @@ export default function PostItems({ onEditPost }: PostItemsProps) {
             </section>
         </main>
     );
-
 }

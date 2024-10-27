@@ -93,7 +93,7 @@ export default function PostItem({ params }: { params: { id: string } }) {
         if (response.ok) {
           alert('Post deleted successfully!');
           // Redirect or update state as needed, e.g., navigate back
-          window.location.href = `/userdashboard/${id}`; // Redirect to homepage or appropriate route
+          window.location.href = '/'; // Redirect to homepage or appropriate route
         } else {
           alert('Failed to delete post.');
         }

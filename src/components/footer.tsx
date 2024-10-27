@@ -12,10 +12,10 @@ const Footer = () => {
           {/* About Section */}
           <div className="col-lg-3 col-md-6 mb-4">
             <h5 className="text-uppercase font-weight-bold text-white mb-3">About Us</h5>
-            <p className="text-muted">
+            <p className="text-white">
               We provide insightful content crafted to educate, inspire, and entertain. Our blog is your daily dose of inspiration and knowledge.
             </p>
-            <p className="text-muted">
+            <p className="text-white">
               Our dedicated team works tirelessly to bring you fresh and reliable information.
             </p>
           </div>
@@ -94,7 +94,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="row">
           <div className="col text-center">
-            <p className="text-muted small mb-0">
+            <p className="text-white small mb-0">
               &copy; {new Date().getFullYear()} Your Blog. All rights reserved.
             </p>
           </div>

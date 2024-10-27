@@ -24,7 +24,8 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string>('');
-    const [posts, setPosts] = useState<unknown[]>([]); // State to hold posts
+
+    const [posts, setPosts] = useState<any[]>([]); // Changed to any[] for compatibility
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -84,6 +85,7 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
                 });
                 if (response.ok) {
                     // Refresh the posts list after deletion
+
                     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
                 } else {
                     throw new Error('Failed to delete post');
@@ -123,7 +125,7 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
                         <div className="card-body">
                             <h3 className="card-title text-secondary">User Information</h3>
                             <hr />
-                            <p><strong>Username:</strong> {user.username}</p>
+                            <p><strong>Username:</strong> {user.firstName}</p>
                             <p><strong>Full Name:</strong> {user.firstName} {user.lastName}</p>
                             <p><strong>Email:</strong> {user.email}</p>
                             <p><strong>Mobile:</strong> {user.mobileNumber}</p>

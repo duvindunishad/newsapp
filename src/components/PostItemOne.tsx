@@ -10,6 +10,7 @@ import defaultAvatar from '../../public/assets/img/profileicon.png'; // Adjust t
 interface PostItemOneProps {
   large: boolean;
   item: PostProps;
+  onEdit: () => void;
 }
 
 const PostItemOne: React.FC<PostItemOneProps> = ({ large, item }) => {

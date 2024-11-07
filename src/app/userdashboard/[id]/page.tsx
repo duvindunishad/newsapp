@@ -25,6 +25,7 @@ export default function UserDashboard({ params }: { params: { id: string } }) {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string>('');
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [posts, setPosts] = useState<any[]>([]); // Changed to any[] for compatibility
 
     useEffect(() => {

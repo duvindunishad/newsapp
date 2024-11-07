@@ -7,7 +7,10 @@ import Preloader from '@/components/Preloader';
 import { PostProps } from '@/sections/Posts';
 
 interface PostItemsProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    posts: any[];
     onEditPost: (postId: string) => void;
+    onDeletePost: (postId: string) => Promise<void>;
     
 }
 
@@ -46,7 +49,9 @@ export default function PostItems({  }: PostItemsProps) {
                         ) : items.length > 0 ? (
                             items.map((item) => (
                                 <div className="col-lg-3 col-md-6" key={item._id}>
-                                    <PostItemOne large={false} item={item} />
+                                    <PostItemOne large={false} item={item} onEdit={function (): void {
+                                        throw new Error('Function not implemented.');
+                                    } } />
                                 </div>
                             ))
                         ) : (
